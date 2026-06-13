@@ -1,0 +1,28 @@
+package app.kaup.core.data
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import app.kaup.core.data.dao.ItemDao
+import app.kaup.core.data.dao.LocationDao
+import app.kaup.core.data.dao.StockMovementDao
+import app.kaup.core.data.entities.ItemEntity
+import app.kaup.core.data.entities.LocationEntity
+import app.kaup.core.data.entities.StockMovementEntity
+
+@Database(
+    entities = [
+        LocationEntity::class,
+        ItemEntity::class,
+        StockMovementEntity::class
+    ],
+    version = 1,
+    exportSchema = true
+)
+abstract class KaupDatabase : RoomDatabase() {
+    abstract fun locationDao(): LocationDao
+    abstract fun itemDao(): ItemDao
+    abstract fun stockMovementDao(): StockMovementDao
+    
+    // Note: Database builder with `fallbackToDestructiveMigration()` 
+    // per ADR-018 will be handled in the `:android-app` DI module.
+}

@@ -1,0 +1,36 @@
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# IDE files
+*.iml
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Compiled class files
+*.dex
+*.class
+
+# Generated and Output files
+bin/
+gen/
+out/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# OS Specific
+.DS_Store
