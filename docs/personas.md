@@ -87,32 +87,32 @@ Should Have: ntfy remote notifications, server-provisioned HOTP
 **Location**: Major city, Indonesia
 **Store type**: Small café, 12 tables
 **Devices**: One Android tablet at the counter, one Android phone (Dian's own)
-**Staff**: Dian (owner) + 2 waiters + 1 part-time barista
+**Staff**: Dian (owner) + 2 crew members + 1 part-time barista
 **Tech comfort**: Runs the café with a mix of WhatsApp orders and walk-ins.
 Has tried a few POS apps but none handled tables well.
 
 ### A day in Dian's life
-A waiter takes an order at a table on the tablet, assigns it to Table 7.
+A crew member takes an order at a table on the tablet, assigns it to Table 7.
 The barista sees the order and prepares it. The customer asks for the bill —
-the waiter prints it from Table 7 in one tap. A group at Table 3 wants to
+the crew member prints it from Table 7 in one tap. A group at Table 3 wants to
 split their bill. This needs to work fast during a Saturday morning rush with
 no time to learn a complex interface.
 
 ### What makes Dian succeed
 - Enabling restaurant mode takes one toggle in settings
 - Table assignment is visual and instant
-- The waiter role only sees what a waiter needs — no inventory screens, no reports
+- The crew role only sees what a crew member needs — no inventory screens, no reports
 - Split bill and table merge work without asking for manager approval
 - The app survives a full Saturday morning rush without a single crash
 
 ### What makes Dian abandon the app
-- A waiter accidentally opening a report screen during a busy service
+- A crew member accidentally opening a report screen during a busy service
 - Table state not updating correctly across the two devices
 - Having to configure roles from scratch because the defaults are wrong
 - Kitchen staff unable to see orders without a full manager account
 
 ### Features that matter most
-Must Have: Restaurant module (table management, order assignment), Waiter role,
+Must Have: Restaurant module (table management, order assignment), Crew role,
 RBAC permission system
 Should Have: Multi-device sync (Tier 1 LAN), order routing per table
 

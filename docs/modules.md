@@ -164,7 +164,7 @@ Writes: `sync_queue` (status updates: PENDING → SYNCING → SYNCED / FAILED)
 - PIN entry and biometric enrollment UI
 - Session lifecycle — `SessionManager` singleton (in-memory only)
 - User account management UI — create, edit, delete staff accounts
-- Role assignment UI — assign Owner / Manager / Cashier / Waiter
+- Role assignment UI — assign Owner / Manager / Cashier / Crew
 - Permission override UI — grant up or restrict down per user
 - HOTP key generation and QR provisioning UI
 - Override code generation UI (manager side)
@@ -446,7 +446,7 @@ DataStore: reads and writes all feature flags and app settings
 - Item management (belongs in `:feature-inventory`)
 
 ### Permissions checked
-- Waiter role has access to table management and order entry by default
+- Crew role has access to table management and order entry by default
 - `POS_VOID_TRANSACTION` required to cancel a table order after it is placed
 - No additional restaurant-specific permissions in v1
 

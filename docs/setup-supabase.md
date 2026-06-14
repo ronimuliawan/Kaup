@@ -80,12 +80,9 @@ CREATE TABLE locations (
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    username TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    role TEXT NOT NULL, -- OWNER, MANAGER, CASHIER, WAITER
-    location_id UUID REFERENCES locations(id),
-    sync_status TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    role TEXT NOT NULL, -- OWNER, MANAGER, CASHIER, CREW
+    permissions_override TEXT[] -- Array of permission enums
 );
 
 -- POS tables

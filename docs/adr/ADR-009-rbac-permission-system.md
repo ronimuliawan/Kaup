@@ -26,7 +26,7 @@ Access control uses a **two-layer model: Roles + Permission Overrides**.
 | `OWNER` | Full access to everything; cannot be restricted |
 | `MANAGER` | Full access except user management (configurable) |
 | `CASHIER` | POS operations only |
-| `WAITER` | Table management + order entry (🔒 `restaurantEnabled`) |
+| `CREW` | Table management + order entry (🔒 `restaurantEnabled`) |
 
 **Layer 2 — Permission overrides (granular, per-user):**
 A manager can grant up (give a cashier `POS_VOID_TRANSACTION`) or restrict down

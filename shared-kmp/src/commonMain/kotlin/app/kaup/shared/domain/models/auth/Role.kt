@@ -4,5 +4,5 @@ enum class Role {
     OWNER,
     MANAGER,
     CASHIER,
-    WAITER
+    CREW
 }
