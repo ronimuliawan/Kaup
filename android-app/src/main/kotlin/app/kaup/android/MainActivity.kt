@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import app.kaup.android.navigation.KaupAppShell
 import app.kaup.core.ui.theme.KaupTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +17,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KaupTheme {
-                KaupAppShell()
+                androidx.compose.material3.Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                ) {
+                    KaupAppShell()
+                }
             }
         }
     }

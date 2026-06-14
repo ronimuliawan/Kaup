@@ -13,8 +13,31 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
+import app.kaup.feature.auth.ui.LockScreen
+
 @Composable
 fun KaupAppShell() {
+    val rootNavController = rememberNavController()
+
+    NavHost(navController = rootNavController, startDestination = "lock_screen") {
+        composable("lock_screen") {
+            LockScreen(
+                onUserSelected = { userId ->
+                    // Simulate entering PIN and successful unlock
+                    rootNavController.navigate("main") {
+                        popUpTo("lock_screen") { inclusive = true }
+                    }
+                }
+            )
+        }
+        composable("main") {
+            MainShell()
+        }
+    }
+}
+
+@Composable
+fun MainShell() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "pos"

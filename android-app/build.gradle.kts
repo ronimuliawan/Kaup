@@ -50,6 +50,7 @@ dependencies {
     implementation(project(":core:core-data"))
     implementation(project(":core:core-ui"))
     implementation(project(":core:core-network"))
+    implementation(project(":feature:feature-auth"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -65,4 +66,9 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     
     implementation(libs.androidx.work.runtime.ktx)
+
+    ksp(libs.androidx.hilt.compiler)
+    
+    // Room runtime needed for DatabaseModule initialization
+    implementation(libs.androidx.room.runtime)
 }
