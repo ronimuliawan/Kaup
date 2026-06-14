@@ -6,6 +6,7 @@ import app.kaup.core.data.auth.SessionManager
 import app.kaup.core.data.dao.UserDao
 import app.kaup.core.data.entities.UserEntity
 import app.kaup.core.data.preferences.StorePreferences
+import app.kaup.shared.domain.models.auth.Permission
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -24,6 +25,7 @@ class ShellViewModel @Inject constructor(
 ) : ViewModel() {
 
     val currentUser: StateFlow<UserEntity?> = sessionManager.currentUser
+    val permissions: StateFlow<Set<Permission>> = sessionManager.permissions
 
     private var timeoutJob: Job? = null
     private var currentTimeoutMs: Long = 10_000L

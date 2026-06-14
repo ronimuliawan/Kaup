@@ -19,7 +19,7 @@ class SessionManager @Inject constructor() {
 
     fun login(user: UserEntity) {
         _currentUser.value = user
-        _permissions.value = user.role.getDefaultPermissions()
+        _permissions.value = user.permissionsOverride ?: user.role.getDefaultPermissions()
     }
 
     fun logout() {
@@ -29,5 +29,15 @@ class SessionManager @Inject constructor() {
 
     fun hasPermission(permission: Permission): Boolean {
         return _permissions.value.contains(permission)
+    }
+
+    fun hasAnyPermission(vararg permissions: Permission): Boolean {
+        val current = _permissions.value
+        return permissions.any { current.contains(it) }
+    }
+
+    fun hasAllPermissions(vararg permissions: Permission): Boolean {
+        val current = _permissions.value
+        return permissions.all { current.contains(it) }
     }
 }

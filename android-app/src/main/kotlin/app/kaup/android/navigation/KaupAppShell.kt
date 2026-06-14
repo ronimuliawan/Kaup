@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 
 import app.kaup.feature.auth.ui.LockScreen
 import app.kaup.feature.auth.ui.onboarding.OnboardingScreen
+import app.kaup.core.ui.auth.LocalPermissions
 
 @Composable
 fun KaupAppShell(
@@ -29,6 +31,7 @@ fun KaupAppShell(
     val rootNavController = rememberNavController()
     val startDest by shellViewModel.startDestination.collectAsState()
     val currentUser by shellViewModel.currentUser.collectAsState()
+    val permissions by shellViewModel.permissions.collectAsState()
 
     LaunchedEffect(currentUser) {
         if (currentUser == null) {
@@ -41,46 +44,48 @@ fun KaupAppShell(
         }
     }
 
-    if (startDest == null) {
-        // Loading state while querying Room
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    } else {
-        NavHost(navController = rootNavController, startDestination = startDest!!) {
-            composable("onboarding") {
-                OnboardingScreen(
-                    onOnboardingComplete = {
-                        rootNavController.navigate("lock_screen") {
-                            popUpTo("onboarding") { inclusive = true }
-                        }
-                    }
-                )
+    CompositionLocalProvider(LocalPermissions provides permissions) {
+        if (startDest == null) {
+            // Loading state while querying Room
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-            composable("lock_screen") {
-                LockScreen(
-                    onUserSelected = { userId ->
-                        // Simulate entering PIN and successful unlock
-                        rootNavController.navigate("main") {
-                            popUpTo("lock_screen") { inclusive = true }
-                        }
-                    }
-                )
-            }
-            composable("main") {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInput(Unit) {
-                            awaitPointerEventScope {
-                                while (true) {
-                                    awaitPointerEvent(PointerEventPass.Initial)
-                                    shellViewModel.onUserInteraction()
-                                }
+        } else {
+            NavHost(navController = rootNavController, startDestination = startDest!!) {
+                composable("onboarding") {
+                    OnboardingScreen(
+                        onOnboardingComplete = {
+                            rootNavController.navigate("lock_screen") {
+                                popUpTo("onboarding") { inclusive = true }
                             }
                         }
-                ) {
-                    MainShell()
+                    )
+                }
+                composable("lock_screen") {
+                    LockScreen(
+                        onUserSelected = { userId ->
+                            // Simulate entering PIN and successful unlock
+                            rootNavController.navigate("main") {
+                                popUpTo("lock_screen") { inclusive = true }
+                            }
+                        }
+                    )
+                }
+                composable("main") {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                awaitPointerEventScope {
+                                    while (true) {
+                                        awaitPointerEvent(PointerEventPass.Initial)
+                                        shellViewModel.onUserInteraction()
+                                    }
+                                }
+                            }
+                    ) {
+                        MainShell()
+                    }
                 }
             }
         }

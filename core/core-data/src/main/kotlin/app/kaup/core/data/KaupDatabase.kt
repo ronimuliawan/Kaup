@@ -12,9 +12,10 @@ import app.kaup.core.data.entities.StockMovementEntity
 import app.kaup.core.data.dao.UserDao
 import app.kaup.core.data.entities.UserEntity
 import app.kaup.core.data.converters.RoleConverter
+import app.kaup.core.data.converters.PermissionSetConverter
 import androidx.room.TypeConverters
 
-@TypeConverters(RoleConverter::class)
+@TypeConverters(RoleConverter::class, PermissionSetConverter::class)
 @Database(
     entities = [
         LocationEntity::class,
@@ -22,7 +23,7 @@ import androidx.room.TypeConverters
         StockMovementEntity::class,
         UserEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class KaupDatabase : RoomDatabase() {
