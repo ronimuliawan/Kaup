@@ -17,4 +17,7 @@ interface UserDao {
 
     @Query("UPDATE users SET hotpSecretEncrypted = :secret, hotpCounter = :counter WHERE id = :userId")
     fun updateUserHotp(userId: String, secret: String, counter: Long)
+
+    @Query("UPDATE users SET hotpCounter = :counter WHERE id = :userId")
+    fun updateUserHotpCounter(userId: String, counter: Long)
 }
