@@ -1,0 +1,27 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace = "app.kaup.core.network"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 24
+    }
+}
+
+dependencies {
+    implementation(project(":shared-kmp"))
+    implementation(project(":core:core-data"))
+
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
+    implementation(libs.kotlinx.coroutines.core)
+}
