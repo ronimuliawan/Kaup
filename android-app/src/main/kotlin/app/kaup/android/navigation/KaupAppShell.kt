@@ -10,6 +10,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,6 +28,18 @@ fun KaupAppShell(
 ) {
     val rootNavController = rememberNavController()
     val startDest by shellViewModel.startDestination.collectAsState()
+    val currentUser by shellViewModel.currentUser.collectAsState()
+
+    LaunchedEffect(currentUser) {
+        if (currentUser == null) {
+            val route = rootNavController.currentDestination?.route
+            if (route != "lock_screen" && route != "onboarding" && route != null) {
+                rootNavController.navigate("lock_screen") {
+                    popUpTo(0)
+                }
+            }
+        }
+    }
 
     if (startDest == null) {
         // Loading state while querying Room
@@ -53,7 +68,20 @@ fun KaupAppShell(
                 )
             }
             composable("main") {
-                MainShell()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitPointerEvent(PointerEventPass.Initial)
+                                    shellViewModel.onUserInteraction()
+                                }
+                            }
+                        }
+                ) {
+                    MainShell()
+                }
             }
         }
     }
