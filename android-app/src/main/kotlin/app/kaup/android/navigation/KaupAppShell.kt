@@ -2,36 +2,59 @@ package app.kaup.android.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 import app.kaup.feature.auth.ui.LockScreen
+import app.kaup.feature.auth.ui.onboarding.OnboardingScreen
 
 @Composable
-fun KaupAppShell() {
+fun KaupAppShell(
+    shellViewModel: ShellViewModel = hiltViewModel()
+) {
     val rootNavController = rememberNavController()
+    val startDest by shellViewModel.startDestination.collectAsState()
 
-    NavHost(navController = rootNavController, startDestination = "lock_screen") {
-        composable("lock_screen") {
-            LockScreen(
-                onUserSelected = { userId ->
-                    // Simulate entering PIN and successful unlock
-                    rootNavController.navigate("main") {
-                        popUpTo("lock_screen") { inclusive = true }
-                    }
-                }
-            )
+    if (startDest == null) {
+        // Loading state while querying Room
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
-        composable("main") {
-            MainShell()
+    } else {
+        NavHost(navController = rootNavController, startDestination = startDest!!) {
+            composable("onboarding") {
+                OnboardingScreen(
+                    onOnboardingComplete = {
+                        rootNavController.navigate("lock_screen") {
+                            popUpTo("onboarding") { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable("lock_screen") {
+                LockScreen(
+                    onUserSelected = { userId ->
+                        // Simulate entering PIN and successful unlock
+                        rootNavController.navigate("main") {
+                            popUpTo("lock_screen") { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable("main") {
+                MainShell()
+            }
         }
     }
 }

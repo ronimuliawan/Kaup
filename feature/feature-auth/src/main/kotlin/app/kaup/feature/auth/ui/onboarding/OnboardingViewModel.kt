@@ -1,0 +1,105 @@
+package app.kaup.feature.auth.ui.onboarding
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.kaup.core.data.dao.UserDao
+import app.kaup.core.data.entities.UserEntity
+import app.kaup.core.data.preferences.StorePreferences
+import app.kaup.shared.domain.models.auth.Role
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+data class OnboardingUiState(
+    val currentStep: Int = 1, // 1: Store, 2: Owner, 3: Success
+    val storeName: String = "",
+    val currency: String = "USD",
+    val ownerName: String = "",
+    val ownerPin: String = "",
+    val isCompleting: Boolean = false,
+    val isSuccess: Boolean = false
+) {
+    val isStep1Valid: Boolean
+        get() = storeName.isNotBlank() && currency.isNotBlank()
+
+    val isStep2Valid: Boolean
+        get() = ownerName.isNotBlank() && ownerPin.length >= 4
+}
+
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
+    private val userDao: UserDao,
+    private val storePreferences: StorePreferences
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(OnboardingUiState())
+    val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
+
+    fun updateStoreName(name: String) {
+        _uiState.update { it.copy(storeName = name) }
+    }
+
+    fun updateCurrency(currency: String) {
+        _uiState.update { it.copy(currency = currency) }
+    }
+
+    fun updateOwnerName(name: String) {
+        _uiState.update { it.copy(ownerName = name) }
+    }
+
+    fun updateOwnerPin(pin: String) {
+        // Limit to numbers, e.g., max 6 digits
+        if (pin.all { it.isDigit() } && pin.length <= 6) {
+            _uiState.update { it.copy(ownerPin = pin) }
+        }
+    }
+
+    fun nextStep() {
+        val currentState = _uiState.value
+        if (currentState.currentStep == 1 && currentState.isStep1Valid) {
+            _uiState.update { it.copy(currentStep = 2) }
+        } else if (currentState.currentStep == 2 && currentState.isStep2Valid) {
+            completeOnboarding()
+        }
+    }
+
+    fun previousStep() {
+        val currentState = _uiState.value
+        if (currentState.currentStep > 1) {
+            _uiState.update { it.copy(currentStep = currentState.currentStep - 1) }
+        }
+    }
+
+    private fun completeOnboarding() {
+        _uiState.update { it.copy(isCompleting = true) }
+        viewModelScope.launch {
+            val state = _uiState.value
+            
+            // 1. Save global settings
+            storePreferences.saveStoreSetup(
+                name = state.storeName,
+                currency = state.currency
+            )
+            
+            // 2. Create the first OWNER user
+            val owner = UserEntity(
+                id = java.util.UUID.randomUUID().toString(),
+                name = state.ownerName,
+                pinHash = state.ownerPin, // Note: In production, hash this properly
+                role = Role.OWNER
+            )
+            
+            // Shift to IO thread to avoid Main thread blocking without hitting Room's KSP suspend bug
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                userDao.insertUser(owner)
+            }
+            
+            // 3. Mark as success
+            _uiState.update { it.copy(isCompleting = false, isSuccess = true, currentStep = 3) }
+        }
+    }
+}

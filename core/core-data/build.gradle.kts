@@ -23,6 +23,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
     
+    // Preferences DataStore
+    implementation(libs.androidx.datastore.preferences)
+
     // Coroutines for DAO flows
     implementation(libs.kotlinx.coroutines.core)
 }

@@ -63,6 +63,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation(libs.androidx.hilt.work)
     
     implementation(libs.androidx.work.runtime.ktx)
@@ -71,4 +72,7 @@ dependencies {
     
     // Room runtime needed for DatabaseModule initialization
     implementation(libs.androidx.room.runtime)
+    
+    // DataStore needed for PreferencesModule
+    implementation(libs.androidx.datastore.preferences)
 }

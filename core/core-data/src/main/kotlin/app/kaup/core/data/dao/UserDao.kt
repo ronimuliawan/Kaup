@@ -13,5 +13,5 @@ interface UserDao {
     fun getAllUsers(): Flow<List<UserEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: UserEntity): Long
+    fun insertUser(user: UserEntity)
 }
