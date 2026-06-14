@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 rootProject.name = "Kaup"
 include(":shared-kmp")
 include(":core:core-data")
+include(":core:core-ui")
