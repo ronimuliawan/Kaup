@@ -5,7 +5,6 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(21)
 
     android {
         namespace = "app.kaup.shared"

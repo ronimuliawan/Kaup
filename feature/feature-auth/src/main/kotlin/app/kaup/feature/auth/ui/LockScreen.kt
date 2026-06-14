@@ -60,7 +60,10 @@ fun LockScreen(
         PinEntryScreen(
             user = selectedUser!!,
             onCancel = { selectedUser = null },
-            onSuccess = { onUserSelected(selectedUser!!.id) }
+            onSuccess = { 
+                viewModel.login(selectedUser!!)
+                onUserSelected(selectedUser!!.id) 
+            }
         )
     }
 }

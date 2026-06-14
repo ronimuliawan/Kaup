@@ -28,4 +28,7 @@ dependencies {
 
     // Coroutines for DAO flows
     implementation(libs.kotlinx.coroutines.core)
+
+    // JSR-330 for @Inject / @Singleton
+    implementation("javax.inject:javax.inject:1")
 }
