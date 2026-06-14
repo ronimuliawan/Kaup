@@ -12,5 +12,7 @@ data class UserEntity(
     val name: String,
     val role: Role,
     val pinHash: String,
-    val permissionsOverride: Set<Permission>? = null
+    val permissionsOverride: Set<Permission>? = null,
+    val hotpSecretEncrypted: String? = null,
+    val hotpCounter: Long = 0
 )

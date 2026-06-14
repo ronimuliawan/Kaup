@@ -23,7 +23,7 @@ import androidx.room.TypeConverters
         StockMovementEntity::class,
         UserEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 abstract class KaupDatabase : RoomDatabase() {

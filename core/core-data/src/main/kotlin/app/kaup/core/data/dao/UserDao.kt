@@ -14,4 +14,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user: UserEntity)
+
+    @Query("UPDATE users SET hotpSecretEncrypted = :secret, hotpCounter = :counter WHERE id = :userId")
+    fun updateUserHotp(userId: String, secret: String, counter: Long)
 }

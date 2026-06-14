@@ -34,4 +34,5 @@ dependencies {
     // We will use literal strings for navigation integration dependencies for now
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
+    implementation(libs.zxing.core)
 }
